@@ -40,16 +40,18 @@ const routes = [
             path: '/userList',
             component: userList,
             meta: ['数据管理', '用户列表'],
-        },{
-            path: '/logList',
-            component: logList,
-            meta: ['数据管理', '日志列表'],
-        },{
-            path: '/logCount',
-            name:'logCount',
-            component: logListGroupByFuntion,
-            meta: ['数据管理', '日志统计'],
-        }]
+        },
+        // {
+        //     path: '/logList',
+        //     component: logList,
+        //     meta: ['数据管理', '日志列表'],
+        // },{
+        //     path: '/logCount',
+        //     name:'logCount',
+        //     component: logListGroupByFuntion,
+        //     meta: ['数据管理', '日志统计'],
+        // }
+        ]
 	}
 ]
 const router = new Router({

@@ -11,37 +11,38 @@ export default {
      * 获取用户详情
      */
     getUserInfo(id){
-        return Api.get('/mms/users/detail/' + id);
+        return Api.get('/users/' + id);
     },
     /**
      * 删除用户
      */
     delUser(id){
-        return Api.delete('/mms/users/delete/' + id);
+        return Api.delete('/users/' + id);
     },
     /**
      * 批量删除用户
      */
     batchDelUser(ids){
-        return Api.delete('/mms/users/batchDelete?ids=' + ids);
+        return Api.delete('/users/batchDel?ids=' + ids);
     },
     /**
      * 获取用户列表
      */
     getUserList(data){
-        return Api.post('/mms/users/getUserList',data);
+        return Api.post('/users/getUsers',data);
     },
     /**
      * 修改用户
      */
     editUser(data){
-        return Api.put('/mms/users/to_add/update',data);
+        debugger
+        return Api.put('/users/'+data.id,data);
     },
     /**
      * 添加用户
      */
     addUser(data){
-        return Api.post('/mms/users/to_add/save',data);
+        return Api.post('/users/add',data);
     },
     /**
      * 获取日志列表
@@ -80,7 +81,7 @@ export default {
      * 校验用户名与公司是否存在
      */
     checkUser(data){
-        return Api.post('/mms/users/checkUser',data);  
+        return Api.post('/users/checkUser',data);
     }
 
 }

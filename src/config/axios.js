@@ -27,7 +27,6 @@ axios.interceptors.response.use(
     },
     error => {
         if (error.response) {
-            debugger
             switch (error.response.status) {
                 case 401:
                     // 401 清除token信息并跳转到登录页面
@@ -45,121 +44,27 @@ axios.interceptors.response.use(
         return Promise.reject(error.response.data)
     },
 )
-// export default {
-//     get(url, params){
-//         return new Promise((resolve, reject) => {
-//             axios.get(url)
-//                 .then(response => {
-//                     resolve(response.data);
-//                 }, err => {
-//                     reject(err);
-//                 })
-//                 .catch((error) => {
-//                     reject(error)
-//                 })
-//         })
-//     },
-//     post(url, params) {
-//         return new Promise((resolve, reject) => {
-//             axios.post(url, params)
-//                 .then(response => {
-//                     resolve(response.data);
-//                 }, err => {
-//                     reject(err);
-//                 })
-//                 .catch((error) => {
-//                     reject(error)
-//                 })
-//         })
-//     },
-//     del(url){
-//         return new Promise((resolve, reject) => {
-//             axios.get(url)
-//                 .then(response => {
-//                     resolve(response.data);
-//                 }, err => {
-//                     reject(err);
-//                 })
-//                 .catch((error) => {
-//                     reject(error)
-//                 })
-//         })
-//     },
-//     put(url, params) {
-//         return new Promise((resolve, reject) => {
-//             axios.put(url, params)
-//                 .then(response => {
-//                     resolve(response.data);
-//                 }, err => {
-//                     reject(err);
-//                 })
-//                 .catch((error) => {
-//                     reject(error)
-//                 })
-//         })
-//     },
-// }
-function synthesisGetData(url, d) {
-    let c = 0
-    for (let i in d) {
-        if (c === 0) {
-            url += '?'
-        } else {
-            url += '&'
-        }
-        url = url + i + '=' + d[i]
-        c++
-    }
-    return url
-}
-function gettoken(d) {
-    let token = ''
-    if (d) {
-        if (token.length > 0) {
-            d.access_token = token
-        }
-        return d
-    } else {
-        if (token.length > 0) {
-            return {access_token: token}
-        } else {
-            return {}
-        }
-    }
-}
 let Api = {
-    gettoken: gettoken,
     post: (url, data, res, e) => {
-        let g = (data && data.getdata) ? data.getdata : null
-        let postdata = data ? data.data : null
-        url = synthesisGetData(url, gettoken(g))
-        return axios.post(url, postdata)
+        return axios.post(url, data,{headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem("token"),
+            }})
     },
     get: (url, data, res, e) => {
-
-        return axios.get(url, {params: gettoken(data),headers: {
+        return axios.get(url, {headers: {
                 'Authorization': 'Bearer ' + window.sessionStorage.getItem("token"),
             }})
     },
     delete: (url, data, res, e) => {
-        axios.delete(url, {params: gettoken(data)}).then(d => {
-            res(d.body, d)
-        }, err => {
-            if (typeof e === 'function') {
-                e(err)
-            }
-        })
+        return axios.delete(url, {headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem("token"),
+            }})
     },
     put: (url, data, res, e) => {
-        axios.put(url, data.data, {params: gettoken(null)}).then(d => {
-            res(d.body, d)
-        }, err => {
-            if (typeof e === 'function') {
-                e(err)
-            }
-        })
+        return axios.put(url, data, {headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem("token"),
+            }})
     },
-    synthesisGetData: () => { return synthesisGetData }
 }
 
 export default Api

@@ -28,18 +28,18 @@
                         </el-option>
                     </el-select>
                 </el-col>
-                <el-col :span="4">
-                    <el-select  v-model="customerId" @change="changeCustomer" filterable clearable placeholder="请选择客户编码">
-                        <el-option
-                            v-for="item in customers"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                            :disabled="item.disabled"
-                        >
-                        </el-option>
-                    </el-select>
-                </el-col>
+                <!--<el-col :span="4">-->
+                    <!--<el-select  v-model="customerId" @change="changeCustomer" filterable clearable placeholder="请选择客户编码">-->
+                        <!--<el-option-->
+                            <!--v-for="item in customers"-->
+                            <!--:key="item.value"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.value"-->
+                            <!--:disabled="item.disabled"-->
+                        <!--&gt;-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-col>-->
             </el-row>
         </section>
 		<tendency :sevenData='sevenData' :sevenDay='sevenDay' :title='title' :customerId="customerId"></tendency>
@@ -56,7 +56,12 @@
     export default {
     	data(){
     		return {
-    		    logCount:{},
+    		    logCount:{
+                    intradaySuccess:20,
+                    intradayFault:30,
+                    successCount:1200,
+                    faultCount:10
+                },
     			sevenDay: [],
     			sevenData: [],
                 type:'week',
@@ -80,9 +85,9 @@
     		async initData(){
                 let day = this.$getMonths(null,6);
                 this.sevenDay = day;
-                this.getLogCount();
-                this.getLogStatustucs();
-                this.getCustomers();
+                // this.getLogCount();
+                // this.getLogStatustucs();
+                // this.getCustomers();
     		},
             getLogCount(){
                 api.getLogCount().then(response => {
@@ -118,7 +123,7 @@
                     times = this.$getMonths(this.type);
                 }
                 this.sevenDay = times;
-                this.getLogStatustucs();
+                // this.getLogStatustucs();
             },
             changeCustomer(data){
                 this.getLogStatustucs();

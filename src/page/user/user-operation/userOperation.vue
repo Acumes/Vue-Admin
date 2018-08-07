@@ -14,10 +14,10 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="密码" prop="userPassword">
+                        <el-form-item label="密码" prop="password">
                             <el-col :span="12">
-                                <el-input type="password" v-model="userForm.userPassword" v-if="!isEdit"></el-input>
-                                <el-input type="password" v-model="userForm.userPassword" v-if="isEdit">
+                                <el-input type="password" v-model="userForm.password" v-if="!isEdit"></el-input>
+                                <el-input type="password" v-model="userForm.password" v-if="isEdit">
                                     <template slot="append"><el-checkbox v-model="isEditPassword">修改密码</el-checkbox></template>
                                 </el-input>
                             </el-col>
@@ -26,66 +26,45 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="公司" prop="companyId">
+                        <el-form-item label="姓名" prop="name">
                             <el-col :span="12">
-                                <el-input  v-model="userForm.companyId" :maxlength="6"></el-input>
+                                <el-input  v-model="userForm.name" ></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="客户" prop="customerId">
+                        <el-form-item label="邮箱" prop="email">
                             <el-col :span="12">
-                                <el-input   v-model="userForm.customerId" ></el-input>
+                                <el-input  v-model="userForm.email" ></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="用户类型" prop="userType">
+                        <el-form-item label="手机号" prop="mobile">
                             <el-col :span="12">
-                                <el-select v-model="userForm.userType" placeholder="请选择" size="medium" style="width: 100%">
-                                    <el-option
-                                        v-for="item in usersType"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
+                                <el-input   v-model="userForm.mobile" ></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="系统身份类型" prop="osIdentityType">
+                        <el-form-item label="电话" prop="phone">
                             <el-col :span="12">
-                                <el-select v-model="userForm.osIdentityType" clearable  placeholder="请选择" size="medium" style="width: 100%">
-                                    <el-option
-                                        v-for="item in osIdentitysType"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
+                                <el-input   v-model="userForm.phone" ></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="系统类型" prop="osType">
+                        <el-form-item label="备注" prop="remarks">
                             <el-col :span="12">
-                                <el-select v-model="userForm.osType" clearable  placeholder="请选择" size="medium" style="width: 100%">
-                                    <el-option
-                                        v-for="item in ossType"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                    </el-option>
-                                </el-select>
+                                <el-input type="textarea"  :rows="3" v-model="userForm.remarks" ></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
@@ -105,24 +84,19 @@
         data(){
             /* 自定义表单校验 */
             var checkUserName = (rule, value, callback) => {
-                let a = this.userForm.companyId;
-                if(value !== ''){
+                if(value != ''){
                     let params = {
                         loginName:this.userForm.loginName,
-                        companyId:this.userForm.companyId,
                         edit:this.isEdit,
                         userId:this.userId
                     }
                     api.checkUser(params).then(response => {
-                        if(response.isExist){
+                        if(response.data){
                             callback(new Error());
+                        }else{
+                            callback();
                         }
-                    }).catch(oError => {
-
-                    });
-                    
-                }{
-                    callback();
+                    })
                 }
             };
             return {
@@ -134,41 +108,22 @@
                 },
                 userForm: {
                     loginName: '',
-                    userPassword: '',
-                    userType: '',
-                    osIdentityType: '',
-                    osType: '',
-                    companyId: '',
-                    customerId: ''
+                    password: '',
+                    name: '',
+                    email: '',
+                    phone: '',
+                    mobile: '',
+                    remarks: ''
                 },
                 userules: {
                     loginName: [
                         { required: true, message: '请输入用户名', trigger: 'blur' },
-                        {validator:checkUserName, message:'该用户名与公司编码已存在，请修改用户名或者公司编码', trigger: 'blur'}
+                        {validator:checkUserName, message:'该用户名已存在，请修改用户名', trigger: 'blur'}
                     ],
-                    userPassword: [
+                    password: [
                         { required: true, message: '请输入密码', trigger: 'blur' },
                     ],
-                    userType: [
-                        { required: true, message: '请选择用户类型', trigger: 'blur' },
-                    ],
-                    companyId: [
-                        { required: true, message: '请输入公司编码', trigger: 'blur' },
-                    ],
-                    customerId: [
-                        { required: true, message: '请输入客户编码', trigger: 'blur' },
-                    ],
-                    osType: [
-                        { required: true, message: '请选择系统身份类型', trigger: 'blur' },
-                    ],
-                    osIdentityType: [
-                        { required: true, message: '请选择系统类型', trigger: 'blur' },
-                    ]
                 },
-                usersType,
-                osIdentitysType,
-                currentPage4: 4,
-                ossType,
                 isEdit: false,
                 isEditPassword: false,
                 userId:''
@@ -217,18 +172,14 @@
             getUserInfo(){
                 this.userId = this.$route.params.id;
                 api.getUserInfo(this.userId).then(res => {
-                    if(res.success){
-                        this.userForm = {
-                            loginName: res.loginName,
-                            userPassword: res.userPassword,
-                            userType: res.userType,
-                            osIdentityType: res.osIdentityType,
-                            osType: res.osType,
-                            companyId: res.companyId,
-                            customerId: res.customerId
-                        }
-                    }else{
-                        console.log(res)
+                    this.userForm = {
+                        loginName: res.data.loginName,
+                        password: res.data.password,
+                        mobile: res.data.mobile,
+                        phone: res.data.phone,
+                        name: res.data.name,
+                        email: res.data.email,
+                        remarks: res.data.remarks
                     }
                 }).catch(error => {
                 })
@@ -252,22 +203,15 @@
                         let functionName = this.isEdit ? 'editUser' : 'addUser';
                         if (this.isEdit) {
                             params.isEditPassword = this.isEditPassword;
-                            params.guid = parseInt(this.$route.params.id);
+                            params.id =this.$route.params.id;
                         }
                         api[functionName](params).then(result => {
-                            if (result.success) {
-                                console.log(result)
-                                this.$message({
-                                    type: 'success',
-                                    message: '添加成功'
-                                });
-                                this.initData();
-                            } else {
-                                this.$message({
-                                    type: 'error',
-                                    message: result.errors
-                                });
-                            }
+                            console.log(result)
+                            this.$message({
+                                type: 'success',
+                                message: '添加成功'
+                            });
+                            this.initData();
                         }).catch(oError => {
                             console.log(oError)
                         })

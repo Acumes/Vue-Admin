@@ -11,9 +11,6 @@
                         <router-link :to="{ path: '/userList' }">
                             <el-menu-item index="userList" >用户列表</el-menu-item>
                         </router-link>
-                        <router-link :to="{ path: '/logList' }">
-                            <el-menu-item index="logList" >日志列表</el-menu-item>
-                        </router-link>
 					</el-submenu>
 				</el-menu>
 			</el-col>

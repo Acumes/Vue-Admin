@@ -12,22 +12,17 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="用户类型">
-                            <el-select v-model="searchForm.userType" clearable placeholder="请选择用户类型" style="width: 80%">
-                                <el-option
-                                    v-for="item in usersType"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="手机">
+                            <el-col :span="20">
+                                <el-input v-model="searchForm.mobile" placeholder="请输入手机号码"></el-input>
+                            </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="系统类型">
-                            <el-select v-model="searchForm.osType" clearable placeholder="请选择系统类型" style="width: 80%">
+                        <el-form-item label="状态">
+                            <el-select v-model="searchForm.enable" clearable placeholder="请选择用户状态" style="width: 80%">
                                 <el-option
-                                    v-for="item in ossType"
+                                    v-for="item in userStatus"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -71,39 +66,32 @@
                   width="220">
                 </el-table-column>
                 <el-table-column
-                  property="frequency"
-                  label="登录次数"
+                  property="name"
+                  label="name"
                   width="220">
                 </el-table-column>
                 <el-table-column
-                  label="用户类型">
+                    property="email"
+                    label="email">
+                </el-table-column>
+                <el-table-column
+                    property="mobile"
+                    label="mobile">
+                </el-table-column>
+                <el-table-column
+                    property="phone"
+                    label="phone">
+                </el-table-column>
+                <el-table-column
+                    label="是否可用">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.userType === '1'">
-                            超级管理员
+                        <div v-if="scope.row.enabled === '1'">
+                            可用
                         </div>
-                        <div v-else-if="scope.row.userType === '2'">
-                            管理员
-                        </div>
-                        <div v-else>
-                            普通用户
+                        <div v-else-if="scope.row.enabled === '0'">
+                            不可用
                         </div>
                     </template>
-                </el-table-column>
-                <el-table-column
-                    property="osType"
-                    label="系统类型">
-                </el-table-column>
-                <el-table-column
-                    property="osIdentityType"
-                    label="系统身份类型">
-                </el-table-column>
-                <el-table-column
-                    property="customerId"
-                    label="客户编码">
-                </el-table-column>
-                <el-table-column
-                    property="companyId"
-                    label="公司编码">
                 </el-table-column>
                 <el-table-column
                     label="操作">
@@ -131,7 +119,7 @@
 <script>
     import headTop from '@/components/headTop';
     import api from '@/api/getData';
-    import {usersType, ossType, osIdentitysType} from '@/api/contants';
+    import {usersType, userStatus} from '@/api/contants';
     export default {
         data(){
             return {
@@ -142,15 +130,11 @@
                 multipleSelection: [],
                 searchForm: {
                     loginName: '',
-                    companyId: '',
-                    userType: '',
-                    customerId: '',
-                    osIdentityType: '',
-                    osType: '',
+                    mobile: '',
+                    enable: '',
                 },
                 usersType,
-                ossType,
-                osIdentitysType,
+                userStatus,
                 total:0
             }
         },
@@ -208,17 +192,10 @@
                     });
                 }
                 // this.multipleSelection.map(itme => return item.guid);
-                let idList = _.map(this.multipleSelection,'guid');
+                let idList = _.map(this.multipleSelection,'id');
                 let ids = idList.join(',');
                 api.batchDelUser(ids).then(result => {
-                    if(result.success){
-                        this.getUsers()
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: result.errors
-                        });
-                    }
+                    this.getUsers()
                 }).catch(oError => {
 
                 })
@@ -232,16 +209,13 @@
                 }
                 api.getUserList(params).then(result => {
                     this.tableData = [];
-                    if(result.success){
-                        this.total = result.total;
-                        if(result.users){
-                            result.users.forEach(item => {
-                                this.tableData.push(item);
-                            })
-                        }
-                    }else{
-                        const tableData = {};
+                    this.total = result.data.total;
+                    if(result.data.users){
+                        result.data.users.forEach(item => {
+                            this.tableData.push(item);
+                        })
                     }
+
                 }).catch(oError => {
 
                 })
@@ -249,15 +223,13 @@
             },
             handleClick(row){
                 console.log(row);
-                const id = row.guid
+                const id = row.id
                 // push({ path: `/user/${row.guid}` })
                 this.$router.push({ path: `userOperation/edit/${id}` });
             },
             async deleteUser(row){
-                api.delUser(row.guid).then(result => {
-                    if(result.success){
-                        this.getUsers();
-                    }
+                api.delUser(row.id).then(result => {
+                    this.getUsers();
                 }).catch(oError => {
 
                 })
@@ -277,11 +249,8 @@
             clearData(){
                 this.searchForm = {
                     loginName: '',
-                    companyId: '',
-                    userType: '',
-                    customerId: '',
-                    osIdentityType: '',
-                    osType: ''
+                    mobile: '',
+                    enable: '',
                 }
             },
             resetSubmit(){

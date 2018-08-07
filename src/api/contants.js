@@ -60,6 +60,18 @@ export const logStatus = [
     }
 ]
 
+export const userStatus = [
+    {
+        value: 1,
+        label: '可用'
+    },
+    {
+        value: 0,
+        label: '不可用'
+    }
+]
+
+
 export const times = [
     {
         value: 'week',
