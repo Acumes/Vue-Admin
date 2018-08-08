@@ -1,20 +1,11 @@
 
 # About
 
-此项目是 vue + element-ui 构建的后台管理系统，是后台项目[node-elm](https://github.com/bailicangdu/node-elm) 的管理系统，所有的数据都是从服务器实时获取的真实数据，具有真实的注册、登陆、管理数据、权限验证等功能。
+此项目是 vue + element-ui 构建的后台管理系统，是后台项目[springboot-security-jwt](https://github.com/Acumes/spring-security-jwt) 的管理系统，数据都是从服务器实时获取的真实数据(首页假数据)，具有真实的登陆、管理数据、权限验证（后补）等功能。
 
 
-# 说明
 
->  如果对您对此项目有兴趣，可以点 "Star" 支持一下 谢谢！ ^_^
-
->  或者您可以 "follow" 一下，我会不断开源更多的有趣的项目
-
->  开发环境 macOS 10.12.4  nodejs 6.10.0
-
->  如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR 👍
-
->  传送门：[前端项目地址](https://github.com/bailicangdu/vue2-elm)  、 [后台系统地址](https://github.com/bailicangdu/node-elm)  、 [原生APP项目地址](https://github.com/bailicangdu/RN-elm)
+>   [后台系统地址](https://github.com/Acumes/spring-security-jwt) 
 
 
 
@@ -42,46 +33,82 @@ npm run local (访问本地后台系统，需运行node-elm后台系统)
 
 ```
 
+- 打包部署Nginx
+<img src="https://github.com/Acumes/img/blob/master/8_08/nginx1.png"/>
+<img src="https://github.com/Acumes/img/blob/master/8_08/nginx2.png"/>
 
-# 效果演示
-
-#### (可在后台管理系统添加商铺，食品等数据，并在前端地址查看效果)
-
-[查看效果请戳这里](http://cangdu.org/manage/)
+- 
+```
+在项目中运行 ： npm run build
 
 
-### 前端项目网址
-[前端网址请戳这里](http://cangdu.org/elm)（请用chrome手机模式预览）
+server {
+	#监听80端口，80端口是知名端口号，用于HTTP协议
+	listen       8083;
+	server_name  localhost;
+	#反向代理的路径（和upstream绑定），location 后面设置映射的路径
+	location / {
+		#root   G:/study/vue/vue2-manage-platform/dist;
+		root   I:/git/Vue-Admin/dist;
+		index  index.html index.htm;
+	} 
 
-###### 移动端扫描下方二维码
+	#静态文件，nginx自己处理
+	location ~ ^/(images|javascript|js|css|flash|media|static|control|doc|img)/ {
+		root I:/git/Vue-Admin/dist;
+		#过期30天，静态文件不怎么更新，过期可以设大一点，如果频繁更新，则可以设置得小一点。
+		expires 30d;
+	}
+	
+	
 
-![](https://github.com/bailicangdu/vue2-manage/blob/master/screenshots/ewm.png)
+	
+	#错误处理页面（可选择性配置）
+	#error_page   404              /404.html;
+	#error_page   500 502 503 504  /50x.html;
+	#location = /50x.html {
+	#    root   html;
+	#}
+}
 
+访问: http://localhost:8083
+
+```
+
+- 配置到后端启动：
+- 
+```
+在项目中运行 ： npm run build
+
+将dist目录下的文件放入
+
+
+访问: http://localhost:8082
+
+```
+- vue-admin
+<img src="https://github.com/Acumes/img/blob/master/8_08/vue-admin.png"/>
+- springboot 
+<img src="https://github.com/Acumes/img/blob/master/8_08/springboot1.png"/>
 
 # 功能列表
 
 - [x] 登陆/注销 -- 完成 
-- [x] 添加商铺 -- 完成
-- [x] 添加商品 -- 完成
-- [x] 数据展示 -- 完成
 - [x] 管理用户 -- 完成
-- [x] 管理商铺 -- 完成
-- [x] 食品管理 -- 完成
-- [x] 权限验证 -- 完成
-- [x] 管理员设置 -- 完成
-- [x] 图表📈 -- 完成
-- [x] 富文本编辑器 -- 完成
 
 
 ## 部分截图
 
 
-<img src="https://github.com/bailicangdu/vue2-manage/blob/master/screenshots/manage_home.png"/>
+<img src="https://github.com/Acumes/img/blob/master/8_08/3.png"/>
+- 
+<img src="https://github.com/Acumes/img/blob/master/8_08/1.png"/>
+- 
+<img src="https://github.com/Acumes/img/blob/master/8_08/2.png"/>
 
-<img src="https://github.com/bailicangdu/vue2-manage/blob/master/screenshots/manage_shop.png"/>
 
-
-
+- 改自: https://github.com/bailicangdu/vue2-manage
+- 具体完整可以参考上方路径补全功能
 ## License
 
 [GPL](https://github.com/bailicangdu/vue2-manage/blob/master/COPYING)
