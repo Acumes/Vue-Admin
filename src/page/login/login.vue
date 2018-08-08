@@ -66,6 +66,7 @@
                                 message: '登录成功'
                             });
                             store.state.global.isLogin = true;
+                            window.sessionStorage.setItem("isLogin","true")
                             tokenUtil.setToken(res.data.data.access_token);
                             console.log(tokenUtil.getToken());
                             this.$router.push('manage')

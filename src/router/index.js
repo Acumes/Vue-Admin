@@ -59,21 +59,21 @@ const router = new Router({
     strict: process.env.NODE_ENV !== 'production',
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (to.matched.some(r => r.meta.requireAuth)) {
-//         // if (window.sessionStorage.getItem("token")) {
-//         //     next();
-//         // }
-//         // else {
-//         //     next({
-//         //         path: '/login',
-//         //         // query: {redirect: to.fullPath}
-//         //     })
-//         // }
-//     }
-//     else {
-//         next();
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(r => r.meta.requireAuth)) {
+        if (window.sessionStorage.getItem("token")) {
+            next();
+        }
+        else {
+            next({
+                path: '/login',
+                // query: {redirect: to.fullPath}
+            })
+        }
+    }
+    else {
+        next();
+    }
+})
 
 export default router
