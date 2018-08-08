@@ -40,6 +40,7 @@ npm run local (访问本地后台系统，需运行node-elm后台系统)
 
 <br/>
 <br/>
+
 ```
 在项目中运行 ： npm run build
 
@@ -76,10 +77,11 @@ server {
 访问: http://localhost:8083
 
 ```
-<br/>
-<br/>
+
+
 - 配置到后端启动：
-<br/>
+
+
 ```
 在项目中运行 ： npm run build
 
@@ -89,10 +91,12 @@ server {
 访问: http://localhost:8082
 
 ```
-<br/>
 - vue-admin
+
 <img src="https://github.com/Acumes/img/blob/master/8_08/vue-build.png"/>
+
 - springboot 
+
 <img src="https://github.com/Acumes/img/blob/master/8_08/springboot1.png"/>
 
 # 功能列表
