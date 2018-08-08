@@ -14,7 +14,6 @@ Vue.use(ElementUI);
 Vue.use(_);
 Vue.prototype.$getTime = getTime
 Vue.prototype.$getMonths = getMonths
-
 new Vue({
 	el: '#app',
 	router,
